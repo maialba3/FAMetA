@@ -4,7 +4,7 @@ Title: Fatty Acid Metabolic Analysis
 Version: 0.1.0
 Author: M Isabel Alcoriza-Balaguer, JC García-Cañaveras.
 Maintainer: M Isabel Alcoriza-Balaguer <maribel_alcoriza@iislafe.es>
-Description: This package (Fatty Acid Metabolic Analysis) is a R package aimed to the estimation of FA import (I), de novo synthesis (S), fractional contribution of the 13C-tracers (D0, D1, D2), elongation (E) and desaturation (Des) based on mass isotopologue data.
+Description: This package (Fatty Acid Metabolic Analysis) is an R package aimed to the estimation of FA import (I), de novo synthesis (S), fractional contribution of the 13C-tracers (D0, D1, D2), elongation (E) and desaturation (Des) based on mass isotopologue data.
 Encoding: UTF-8
 Depends: R (>= 4.0), LipidMS, rmarkdown, knitr
 Imports: accucor, scales, gtools, minpack.lm, tidyr, plyr, gplots, grDevices
