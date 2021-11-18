@@ -1,0 +1,21 @@
+
+export("synthesisAnalysis", "elongationAnalysis", "desaturationAnalysis",
+       "summarizeResults")
+export("annotateFA", "plotFA", "curateFAannotations", "removeFA", "changeFArt",
+       "addFA", "searchFAisotopes", "searchIS", "normalizeIS",
+       "readfadatafile", "dataCorrection", "correctNatAb13C", "blankSubstraction",
+       "externalNormalization")
+
+import("LipidMS", "rmarkdown", "knitr")
+importFrom("accucor", "carbon_isotope_correction")
+importFrom("graphics", "axis", "barplot", "legend", "lines")
+importFrom("stats", "as.formula", "coef", "predict", "sd")
+importFrom("utils", "head", "read.csv", "tail")
+importFrom("scales", "alpha")
+importFrom("gtools", "permutations")
+importFrom("minpack.lm", "nls.lm.control", "nlsLM")
+importFrom("tidyr", "crossing", "pivot_wider")
+importFrom("plyr", "rbind.fill")
+importFrom("gplots", "heatmap.2")
+importFrom("tools", "file_ext")
+importFrom("grDevices", "colorRampPalette")
