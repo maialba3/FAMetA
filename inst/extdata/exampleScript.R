@@ -19,7 +19,7 @@ library(tools)
 
 # If any other external software is used for processing, data can be loaded from
 # a csv file using the following function:
-# fadata <- readfadatafile("externafadata.csv", sep=",", dec=".")
+# fadata <- readfadatafile("externalfadata.csv", sep=",", dec=".")
 
 # In this case, go directly to data correction step.
 
