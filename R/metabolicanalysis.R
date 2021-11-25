@@ -689,7 +689,7 @@ summarizeResults <- function(fadata, controlgroup = NA,
   
   S16 <- df
   rownames(S16) <- df$FA
-  S16 <- S16[,!grepl("FA", colnames(S16))]
+  S16 <- S16[,colnames(S16) != "FA"]
   results$allparameters$S16 <- S16
   
   
@@ -702,7 +702,7 @@ summarizeResults <- function(fadata, controlgroup = NA,
                                          values_from = "E1"))
     E1 <- df
     rownames(E1) <- df$FA
-    E1 <- E1[,!grepl("FA", colnames(E1))]
+    E1 <- E1[,colnames(E1) != "FA"]
     results$allparameters$E1 <- E1
     
     
@@ -713,7 +713,7 @@ summarizeResults <- function(fadata, controlgroup = NA,
                                     values_from = "E2"))
     E2 <- df
     rownames(E2) <- df$FA
-    E2 <- E2[,!grepl("FA", colnames(E1))]
+    E2 <- E2[,colnames(E2) != "FA"]
     results$allparameters$E2 <- E2
     
     
@@ -724,7 +724,7 @@ summarizeResults <- function(fadata, controlgroup = NA,
                                     values_from = "E3"))
     E3 <- df
     rownames(E3) <- df$FA
-    E3 <- E3[,!grepl("FA", colnames(E3))]
+    E3 <- E3[,colnames(E3) != "FA"]
     results$allparameters$E3 <- E3
     
     
@@ -735,7 +735,7 @@ summarizeResults <- function(fadata, controlgroup = NA,
                                     values_from = "E4"))
     E4 <- df
     rownames(E4) <- df$FA
-    E4 <- E4[,!grepl("FA", colnames(E4))]
+    E4 <- E4[,colnames(E4) != "FA"]
     results$allparameters$E4 <- E4
     
     
@@ -746,7 +746,7 @@ summarizeResults <- function(fadata, controlgroup = NA,
                                     values_from = "E5"))
     E5 <- df
     rownames(E5) <- df$FA
-    E5 <- E5[,!grepl("FA", colnames(E5))]
+    E5 <- E5[,colnames(E5) != "FA"]
     results$allparameters$E5 <- E5
     
   }

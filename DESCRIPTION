@@ -1,7 +1,7 @@
 Package: FAMetA
 Type: Package
 Title: Fatty Acid Metabolic Analysis
-Version: 0.1.0
+Version: 0.1.1
 Author: M Isabel Alcoriza-Balaguer, JC García-Cañaveras.
 Maintainer: M Isabel Alcoriza-Balaguer <maribel_alcoriza@iislafe.es>
 Description: R package aimed to the estimation of FA import (I), de novo synthesis (S), fractional contribution of the 13C-tracers (D0, D1, D2), elongation (E) and desaturation (Des) based on mass isotopologue data.
