@@ -279,21 +279,16 @@ runSynthesisAnalysis <- function(fadata, toDo, R2Thr = R2Thr,
     #==========================================================================#
     # Summarize results
     #==========================================================================#
-    # summaries <- lapply(resultsSynth, function(x) sumTable(x[[2]], fadata$metadata$sampletype))
-    # summaryRes <- sapply(names(summaries), function(x){
-    #   colnames(summaries[[x]]) <- paste(x, colnames(summaries[[x]]), sep="")
-    #   return(summaries[x])
-    # })
-    # names(summaryRes) <- names(summaries)
     results <- cbind(FA = rep(toDo, each = ncol(fadata$intensities)),
                              Sample = colnames(fadata$intensities),
                              Group = fadata$metadata$sampletype,
                              do.call(plyr::rbind.fill, lapply(resultsSynth, function(x) x[[1]])))
     predictedValues <- data.frame(do.call(rbind, lapply(resultsSynth, function(x)
       do.call(cbind, lapply(x$models, function(y) if (!any(is.na(y))){predict(y)}else{rep(NA, nrow(x$mid))})))))
-    predictedValues <- cbind(fadata$fattyacids[fadata$fattyacids$Compound %in% toDo,], predictedValues)
-    rownames(predictedValues) <- paste(fadata$fattyacids$Compound[fadata$fattyacids$Compound %in% toDo]
-                                   , "_M+", fadata$fattyacids$Label[fadata$fattyacids$Compound %in% toDo], sep="")
+    compounds <- do.call(rbind, lapply(resultsSynth, function(x) x[[2]][,c("Compound", "Label")]))
+    predictedValues <- cbind(compounds, predictedValues)
+    rownames(predictedValues) <- paste(predictedValues$Compound, "_M+", 
+                                       predictedValues$Label, sep="")
 
     plots <- plotResults(resultsSynth, fadata$metadata$sampletype, toDo)
 

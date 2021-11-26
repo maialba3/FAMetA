@@ -129,13 +129,13 @@ synthesisAnalysis <- function(fadata,
             D2 <- inputD2
             P <- inputP
           }
-          elo_14 <- runSynthesisAnalysis(fadata = fadata, toDo = toDo14,
+          synt_14 <- runSynthesisAnalysis(fadata = fadata, toDo = toDo14,
                                               R2Thr = R2Thr, maxiter = maxiter,
                                               maxconvergence = maxconvergence,
                                               D1 = D1, D2 = D2, P = P,
                                               startpoints = startpoints)
         } else {
-          elo_14 <- list()
+          synt_14 <- list()
         }
 
         toDo16 <- toDo2[grep("FA\\(16", toDo2)]
@@ -155,47 +155,47 @@ synthesisAnalysis <- function(fadata,
             D2 <- inputD2
             P <- inputP
           }
-          elo_16 <- runSynthesisAnalysis(fadata = fadata, toDo = toDo16,
-                                              R2Thr = R2Thr, maxiter = maxiter,
-                                              maxconvergence = maxconvergence,
-                                              D1 = D1, D2 = D2, P = P,
-                                              startpoints = startpoints,
-                                              parameters = parameters)
+          synt_16 <- runSynthesisAnalysis(fadata = fadata, toDo = toDo16,
+                                         R2Thr = R2Thr, maxiter = maxiter,
+                                         maxconvergence = maxconvergence,
+                                         D1 = D1, D2 = D2, P = P,
+                                         startpoints = startpoints,
+                                         parameters = parameters)
         } else {
-          elo_16 <- list()
+          synt_16 <- list()
         }
 
-        if (length(elo_14) > 0 & length(elo_16) > 0){
+        if (length(synt_14) > 0 & length(synt_16) > 0){
           results <- list()
-          results$fas <- c(results1$fas, elo_14$fas, elo_16$fas)
+          results$fas <- c(results1$fas, synt_14$fas, synt_16$fas)
           results$results <- data.frame(rbind(results1$results,
-                                              elo_14$results,
-                                              elo_16$results))
+                                              synt_14$results,
+                                              synt_16$results))
           results$predictedValues <- data.frame(rbind(results1$predictedValues,
-                                                      elo_14$predictedValues,
-                                                      elo_16$predictedValues))
-          results$plots <- c(results1$plots, elo_14$plots, elo_16$plots)
-          results$details <- c(results1$details, elo_14$details, elo_16$details)
+                                                      synt_14$predictedValues,
+                                                      synt_16$predictedValues))
+          results$plots <- c(results1$plots, synt_14$plots, synt_16$plots)
+          results$details <- c(results1$details, synt_14$details, synt_16$details)
         } else {
-          if (length(elo_14) > 0){
+          if (length(synt_14) > 0){
             results <- list()
-            results$fas <- c(results1$fas, elo_14$fas)
+            results$fas <- c(results1$fas, synt_14$fas)
             results$results <- data.frame(rbind(results1$results,
-                                                elo_14$results))
+                                                synt_14$results))
             results$predictedValues <- data.frame(rbind(results1$predictedValues,
-                                                        elo_14$predictedValues))
-            results$plots <- c(results1$plots, elo_14$plots)
-            results$details <- c(results1$details, elo_14$details)
+                                                        synt_14$predictedValues))
+            results$plots <- c(results1$plots, synt_14$plots)
+            results$details <- c(results1$details, synt_14$details)
           } else {
             results <- list()
-            results$fas <- c(results1$fas, elo_16$fas)
+            results$fas <- c(results1$fas, synt_16$fas)
             results$results <- data.frame(rbind(results1$results,
-                                                elo_16$results))
+                                                synt_16$results))
             results$predictedValues <- data.frame(rbind(results1$predictedValues,
-                                                    elo_16$predictedValues))
-            results$plots <- c(results1$plots, elo_16$plots)
+                                                    synt_16$predictedValues))
+            results$plots <- c(results1$plots, synt_16$plots)
 
-            results$details <- c(results1$details, elo_16$details)
+            results$details <- c(results1$details, synt_16$details)
           }
         }
       } else {
@@ -357,10 +357,10 @@ elongationAnalysis <- function(fadata, R2Thr = 0.98, maxiter = 1e4,
 
     predictedValues <- data.frame(do.call(rbind, lapply(resultsElong, function(x)
       do.call(cbind, lapply(x$models, function(y) if (!any(is.na(y))){predict(y)}else{rep(NA, nrow(x$mid))})))))
-    predictedValues <- data.frame(cbind(fadata$fattyacids[fadata$fattyacids$Compound %in% toDo,],
-                         predictedValues))
-    rownames(predictedValues) <- paste(fadata$fattyacids$Compound[fadata$fattyacids$Compound %in% toDo]
-                                   , "_M+", fadata$fattyacids$Label[fadata$fattyacids$Compound %in% toDo], sep="")
+    compounds <- do.call(rbind, lapply(resultsElong, function(x) x[[2]][,c("Compound", "Label")]))
+    predictedValues <- cbind(compounds, predictedValues)
+    rownames(predictedValues) <- paste(predictedValues$Compound, "_M+", 
+                                       predictedValues$Label, sep="")
 
   } else {
     stop("Unable to run EIA")
