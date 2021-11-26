@@ -4,12 +4,14 @@
 \alias{plotFA}
 \title{Plot FA EICs}
 \usage{
-plotFA(msbatch, dmz)
+plotFA(msbatch, dmz, verbose = TRUE)
 }
 \arguments{
 \item{msbatch}{annotated msbatch.}
 
 \item{dmz}{mz tolerance in ppm for EIC extraction.}
+
+\item{verbose}{print information messages.}
 }
 \value{
 annotated msbatch with saved plots.

@@ -8,7 +8,7 @@ export("annotateFA", "plotFA", "curateFAannotations", "removeFA", "changeFArt",
 
 import("LipidMS", "rmarkdown", "knitr")
 importFrom("accucor", "carbon_isotope_correction")
-importFrom("graphics", "axis", "barplot", "legend", "lines")
+importFrom("graphics", "axis", "barplot", "legend", "lines", "par")
 importFrom("stats", "as.formula", "coef", "predict", "sd")
 importFrom("utils", "head", "read.csv", "tail")
 importFrom("scales", "alpha")

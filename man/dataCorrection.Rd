@@ -11,7 +11,8 @@ dataCorrection(
   blankgroup = "blank",
   externalnormalization = c(),
   resolution = 140000,
-  purity13C = 0.99
+  purity13C = 0.99,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ additional measure that must be used to normalize data (i.e. protein).}
 \item{resolution}{resolution of the mass spectrometer.}
 
 \item{purity13C}{purity of the tracer employed.}
+
+\item{verbose}{print information messages.}
 }
 \value{
 corrected fadata.
@@ -37,8 +40,8 @@ Data correction for natural abundance of 13C and data normalization using
 internal standards followed by blank substraction.
 }
 \examples{
-\dontrun{
-examplefadata <- dataCorrection(examplefadata, blankgroup = "Blank")
+\donttest{
+ssdata <- dataCorrection(ssexamplefadata, blankgroup="Blank")
 }
 
 }

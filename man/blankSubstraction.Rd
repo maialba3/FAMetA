@@ -4,12 +4,14 @@
 \alias{blankSubstraction}
 \title{substract blank samples.}
 \usage{
-blankSubstraction(fadata, blankgroup = "blank")
+blankSubstraction(fadata, blankgroup = "blank", verbose = TRUE)
 }
 \arguments{
 \item{fadata}{fadata.}
 
 \item{blankgroup}{name used to define blank samples group.}
+
+\item{verbose}{print information messages.}
 }
 \value{
 blank substracted fadata.

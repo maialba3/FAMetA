@@ -91,6 +91,7 @@ annotateFA <- function(msbatch,
 #'
 #' @param msbatch annotated msbatch.
 #' @param dmz mz tolerance in ppm for EIC extraction.
+#' @param verbose print information messages.
 #'
 #' @return annotated msbatch with saved plots.
 #'
@@ -108,8 +109,10 @@ annotateFA <- function(msbatch,
 #' }
 #'
 #' @author M Isabel Alcoriza-Balaguer <maribel_alcoriza@iislafe.es>
-plotFA <- function(msbatch, dmz){
+plotFA <- function(msbatch, dmz, verbose = TRUE){
 
+  oldpar <- graphics::par(no.readonly = TRUE)
+  on.exit(graphics::par(oldpar, new = FALSE))
   #============================================================================#
   # Check arguments
   #============================================================================#
@@ -225,7 +228,7 @@ plotFA <- function(msbatch, dmz){
         } else if (nrow(eics[[startat]]) == 0 & startat < length(msbatch$msobjects)) {
           startat <- startat + 1
         } else {
-          cat("No peaks found")
+          if(verbose){cat("No peaks found")}
           plot(0, xlim = c(iniRT, endRT), ylim = c(0, 100), type = "l", lwd = 2,
                col = scales::alpha("grey", 0.7),
                main = paste(fa, "; EIC: ", round(isomers$mz[p],3), "; RT: ",
@@ -335,7 +338,7 @@ curateFAannotations <- function(msbatch, faid, dmz = 10){
 
 
   if (any(duplicated(faid$FAid))){
-    cat(paste(unique(faid$FAid[duplicated(faid$FAid)]), collapse=", "), "duplicated.")
+    message(paste(unique(faid$FAid[duplicated(faid$FAid)]), collapse=", "), "duplicated.")
     stop("Compound names (FAid column) must be unique.")
   }
   if (any(duplicated(faid$ID) & !is.na(faid$ID))){
@@ -838,6 +841,7 @@ readfadatafile <- function(file, sep = ",", dec = "."){
 #' additional measure that must be used to normalize data (i.e. protein).
 #' @param resolution resolution of the mass spectrometer.
 #' @param purity13C purity of the tracer employed.
+#' @param verbose print information messages.
 #'
 #' @return corrected fadata.
 #' 
@@ -846,8 +850,8 @@ readfadatafile <- function(file, sep = ",", dec = "."){
 #' version 0.2.4 (2021), <https://doi.org/10.1021/acs.analchem.7b00396>. 
 #'
 #' @examples
-#' \dontrun{
-#' examplefadata <- dataCorrection(examplefadata, blankgroup = "Blank")
+#' \donttest{
+#' ssdata <- dataCorrection(ssexamplefadata, blankgroup="Blank")
 #' }
 #'
 #' @author M Isabel Alcoriza-Balaguer <maribel_alcoriza@iislafe.es>
@@ -856,7 +860,8 @@ dataCorrection <-function(fadata,
                           blankgroup = "blank", 
                           externalnormalization = c(),
                           resolution = 140000, 
-                          purity13C = 0.99){
+                          purity13C = 0.99,
+                          verbose = TRUE){
 
   #============================================================================#
   # Check arguments
@@ -871,24 +876,26 @@ dataCorrection <-function(fadata,
   # Correct data
   #============================================================================#
   if (correct13C){
-    cat("Data correction for natural abundance of 13C...")
+    if(verbose){cat("Data correction for natural abundance of 13C...")}
     fadata <- correctNatAb13C(fadata, resolution = resolution, purity = purity13C)
-    cat("OK\n")
+    if(verbose){cat("OK\n")}
   }
   if ("IS" %in% names(fadata)){
-    cat("Data normalization with internal standards...")
-    fadata <- normalizeIS(fadata)
-    cat("OK\n")
+    if(verbose){cat("Data normalization with internal standards...")}
+    fadata <- normalizeIS(fadata, verbose = verbose)
+    if(verbose){cat("OK\n")}
   }
   if (length(blankgroup) > 0){
-    cat("Blank substraction...")
-    fadata <- blankSubstraction(fadata, blankgroup = blankgroup)
-    cat("OK\n")
+    if(verbose){cat("Blank substraction...")}
+    fadata <- blankSubstraction(fadata, blankgroup = blankgroup, verbose = verbose)
+    if(verbose){cat("OK\n")}
   }
   if (length(externalnormalization) > 0){
-    cat("External normalization...")
-    fadata <- externalNormalization(fadata, externalnormalization = externalnormalization)
-    cat("OK\n")
+    if(verbose){cat("External normalization...")}
+    fadata <- externalNormalization(fadata, 
+                                    externalnormalization = externalnormalization,
+                                    verbose = verbose)
+    if(verbose){cat("OK\n")}
   }
   
 
@@ -915,11 +922,12 @@ dataCorrection <-function(fadata,
 #' Data normalization using internal stardards.
 #'
 #' @param fadata fadata list.
+#' @param verbose print information messages.
 #'
 #' @return normalised fadata by IS.
 #'
 #' @author M Isabel Alcoriza-Balaguer <maribel_alcoriza@iislafe.es>
-normalizeIS <-function(fadata){
+normalizeIS <-function(fadata, verbose = TRUE){
 
   #============================================================================#
   # Check arguments
@@ -931,13 +939,13 @@ normalizeIS <-function(fadata){
   }
 
   if (!"IS" %in% names(fadata)){
-    cat("No IS data available.")
+    if(verbose){cat("No IS data available.")}
   } else {
     if (nrow(fadata$IS) == 0){
-      cat("No IS data available.")
+      if(verbose){cat("No IS data available.")}
     }
     if (all(fadata$IS[1,] == 1)){
-      cat("No IS data available.")
+      if(verbose){cat("No IS data available.")}
     }
   }
 
@@ -1001,7 +1009,7 @@ correctNatAb13C <- function(fadata, resolution = 140000, purity = 0.99){
     return(c(class, cdb))
   })))
   colnames(fas) <- c("Class", "CDB")
-  formulas <- do.call(rbind, apply(fas, 1, LipidMS:::getFormula,
+  formulas <- do.call(rbind, apply(fas, 1, getFormula,
                                    dbs = list(fadb = FAMetA::fattyacidsdb)))[,1]
 
   #============================================================================#
@@ -1038,11 +1046,12 @@ correctNatAb13C <- function(fadata, resolution = 140000, purity = 0.99){
 #'
 #' @param fadata fadata.
 #' @param blankgroup name used to define blank samples group.
+#' @param verbose print information messages.
 #'
 #' @return blank substracted fadata.
 #'
 #' @author M Isabel Alcoriza-Balaguer <maribel_alcoriza@iislafe.es>
-blankSubstraction <- function(fadata, blankgroup = "blank"){
+blankSubstraction <- function(fadata, blankgroup = "blank", verbose = TRUE){
 
   #============================================================================#
   # Check arguments
@@ -1072,8 +1081,8 @@ blankSubstraction <- function(fadata, blankgroup = "blank"){
     fadata$metadata <- fadata$metadata[toupper(fadata$metadata$sampletype) != toupper(blankgroup),,
                                    drop = FALSE]
   } else {
-    cat("No blank samples to substract. Use blankgroup argument to indicate
-            the group name for blank samples.")
+    if(verbose){cat("No blank samples to substract. Use blankgroup argument to 
+    indicate the group name for blank samples.")}
   }
 
   return(fadata)
@@ -1087,11 +1096,12 @@ blankSubstraction <- function(fadata, blankgroup = "blank"){
 #' @param fadata fadata list.
 #' @param externalnormalization column names of metadata data frame used to
 #' define external measures.
+#' @param verbose print information messages.
 #'
 #' @return normalised fadata by external measures.
 #'
 #' @author M Isabel Alcoriza-Balaguer <maribel_alcoriza@iislafe.es>
-externalNormalization <-function(fadata, externalnormalization){
+externalNormalization <-function(fadata, externalnormalization, verbose = TRUE){
 
   #============================================================================#
   # Check arguments
@@ -1103,7 +1113,7 @@ externalNormalization <-function(fadata, externalnormalization){
   }
 
   if (length(externalnormalization) == 0){
-    cat("No external measures available")
+    if(verbose){cat("No external measures available")}
   } else {
     fadata$metadata[,externalnormalization] <-
       apply(fadata$metadata[,externalnormalization, drop=FALSE], 2, as.numeric)

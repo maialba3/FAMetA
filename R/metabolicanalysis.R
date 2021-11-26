@@ -25,6 +25,7 @@
 #' @param propagateD logical. If TRUE, unsaturated fatty acids use estimated D0,
 #' D1,D2 and P values for saturated fatty acids (14:0 for FA shorter than 16C
 #' and 16:0 for FA with 16C.).
+#' @param verbose print information messages.
 #'
 #' @details Synthesis analysis will model FA data for FA up to 16 carbons to
 #' estimate 13C-tracer contribution to the acetyl-CoA pool for FA synthesis (D)
@@ -39,22 +40,28 @@
 #' synthesis element of the fa list.
 #'
 #' @examples
+#' \donttest{
+#' ssdata <- dataCorrection(ssexamplefadata, blankgroup="Blank")
+#' ssdata <- synthesisAnalysis(ssdata, R2Thr = 0.95, maxiter = 1e3,
+#' maxconvergence = 100, startpoints = 5)
+#' }
+#' 
 #' \dontrun{
-#' examplefadata <- dataCorrection(examplefadata, blankgroup = "Blank")
-#' examplefadata <- synthesisAnalysis(examplefadata, R2Thr = 0.95, maxiter = 1e3,
+#' fadata <- dataCorrection(examplefadata, blankgroup = "Blank")
+#' fadata <- synthesisAnalysis(fadata, R2Thr = 0.95, maxiter = 1e3,
 #' maxconvergence = 100, startpoints = 5)
 #'
 #' # If inhibitors have been used, make sure D2 has not been underestimated. If so,
 #' # D2 could be set as the one calculated for 13-Glc Control samples to improve
 #' # the results:
 #'
-#' # D2 <- examplefadata$synthesis$results$D2[examplefadata$synthesis$results$FA == "FA(16:0)"]
-#' # examplefadata$synthesis$results$Group[examplefadata$synthesis$results$FA == "FA(16:0)"]
+#' # D2 <- fadata$synthesis$results$D2[fadata$synthesis$results$FA == "FA(16:0)"]
+#' # fadata$synthesis$results$Group[fadata$synthesis$results$FA == "FA(16:0)"]
 #'
 #' # D2[4:12] <- rep(mean(D2[1:3]))
 #'
 #' # relaunch synthesis analysis fixing D2
-#' # examplefadata <- synthesisAnalysis(examplefadata, R2Thr = 0.95, maxiter = 1e3,
+#' # fadata <- synthesisAnalysis(fadata, R2Thr = 0.95, maxiter = 1e3,
 #' #                             maxconvergence = 100, startpoints = 5, D2 = D2)
 #' }
 #'
@@ -68,7 +75,8 @@ synthesisAnalysis <- function(fadata,
                         P = NA,
                         startpoints = 5,
                         parameters = FAMetA::parameters,
-                        propagateD = TRUE){
+                        propagateD = TRUE, 
+                        verbose = TRUE){
 
   #============================================================================#
   # Check arguments
@@ -110,7 +118,8 @@ synthesisAnalysis <- function(fadata,
                                        R2Thr = R2Thr, maxiter = maxiter,
                                        maxconvergence = maxconvergence,
                                        D1 = D1, D2 = D2, P = P,
-                                       startpoints = startpoints)
+                                       startpoints = startpoints,
+                                       verbose = verbose)
       if (length(toDo2) > 0){
         toDo14 <- toDo2[grep("FA\\(16", toDo2, invert = TRUE)]
         if (length(toDo14) > 0){
@@ -130,10 +139,11 @@ synthesisAnalysis <- function(fadata,
             P <- inputP
           }
           synt_14 <- runSynthesisAnalysis(fadata = fadata, toDo = toDo14,
-                                              R2Thr = R2Thr, maxiter = maxiter,
-                                              maxconvergence = maxconvergence,
-                                              D1 = D1, D2 = D2, P = P,
-                                              startpoints = startpoints)
+                                          R2Thr = R2Thr, maxiter = maxiter,
+                                          maxconvergence = maxconvergence,
+                                          D1 = D1, D2 = D2, P = P,
+                                          startpoints = startpoints,
+                                          verbose = verbose)
         } else {
           synt_14 <- list()
         }
@@ -160,7 +170,8 @@ synthesisAnalysis <- function(fadata,
                                          maxconvergence = maxconvergence,
                                          D1 = D1, D2 = D2, P = P,
                                          startpoints = startpoints,
-                                         parameters = parameters)
+                                         parameters = parameters,
+                                         verbose = verbose)
         } else {
           synt_16 <- list()
         }
@@ -233,6 +244,7 @@ synthesisAnalysis <- function(fadata,
 #' @param D2Thr minimum D2 value allowed to perform the elongation analysis.
 #' @param parameters parameters to be estimated for each fatty acid. It can be
 #' modified to change them or to add new fatty acids (adding new rows).
+#' @param verbose print information messages.
 #'
 #' @details Main route of de novo synthesis plus elongation starts at 16 carbons
 #' and then adds blocks of 2 carbons. Therefore, isotopologue distributions for
@@ -248,18 +260,26 @@ synthesisAnalysis <- function(fadata,
 #' elongation element of the fa list.
 #'
 #' @examples
-#' \dontrun{
-#' examplefadata <- dataCorrection(examplefadata, blankgroup = "Blank")
-#' examplefadata <- synthesisAnalysis(examplefadata, R2Thr = 0.95, maxiter = 1e3,
+#' \donttest{
+#' ssdata <- dataCorrection(ssexamplefadata, blankgroup="Blank")
+#' ssdata <- synthesisAnalysis(ssdata, R2Thr = 0.95, maxiter = 1e3,
 #' maxconvergence = 100, startpoints = 5)
-#' examplefadata <- elongationAnalysis(examplefadata, R2Thr = 0.95, maxiter = 1e4,
+#' ssdata <- elongationAnalysis(ssdata, R2Thr = 0.95, maxiter = 1e4,
+#' maxconvergence=100, startpoints = 5, D2Thr = 0.1)
+#' }
+#' 
+#' \dontrun{
+#' fadata <- dataCorrection(examplefadata, blankgroup = "Blank")
+#' fadata <- synthesisAnalysis(fadata, R2Thr = 0.95, maxiter = 1e3,
+#' maxconvergence = 100, startpoints = 5)
+#' fadata <- elongationAnalysis(fadata, R2Thr = 0.95, maxiter = 1e4,
 #' maxconvergence=100, startpoints = 5, D2Thr = 0.1)
 #' }
 #'
 #' @author M Isabel Alcoriza-Balaguer <maribel_alcoriza@iislafe.es>
 elongationAnalysis <- function(fadata, R2Thr = 0.98, maxiter = 1e4,
                          maxconvergence=100, startpoints=5, D2Thr = 0.1,
-                         parameters = FAMetA::parameters){
+                         parameters = FAMetA::parameters, verbose = TRUE){
 
   #============================================================================#
   # Check arguments
@@ -321,7 +341,7 @@ elongationAnalysis <- function(fadata, R2Thr = 0.98, maxiter = 1e4,
   if (length(toDo) > 0){
     resultsElong <- list()
     for (c in toDo){
-      cat(paste("\n", c, "...", sep=""))
+      if(verbose){cat(paste("\n", c, "...", sep=""))}
       fa <- fas[[c]]
       fa <- fa[order(fa$Label),, drop = FALSE]
       M <- as.numeric(parameters[parameters$FattyAcid == c, "M"])
@@ -345,7 +365,7 @@ elongationAnalysis <- function(fadata, R2Thr = 0.98, maxiter = 1e4,
                                                  maxconvergence = maxconvergence,
                                                  startpoints = startpoints,
                                                  D2Thr = D2Thr)
-      cat("OK")
+      if(verbose){cat("OK")}
     }
     #==========================================================================#
     # Summarize results
@@ -405,13 +425,22 @@ elongationAnalysis <- function(fadata, R2Thr = 0.98, maxiter = 1e4,
 #' desaturation element of the fa list.
 #'
 #' @examples
-#' \dontrun{
-#' examplefadata <- dataCorrection(examplefadata, blankgroup = "Blank")
-#' examplefadata <- synthesisAnalysis(examplefadata, R2Thr = 0.95, maxiter = 1e3,
+#' \donttest{
+#' ssdata <- dataCorrection(ssexamplefadata, blankgroup="Blank")
+#' ssdata <- synthesisAnalysis(ssdata, R2Thr = 0.95, maxiter = 1e3,
 #' maxconvergence = 100, startpoints = 5)
-#' examplefadata <- elongationAnalysis(examplefadata, R2Thr = 0.95, maxiter = 1e4,
-#' maxconvergence = 100, startpoints = 5, D2Thr = 0.1)
-#' examplefadata <- desaturationAnalysis(examplefadata, SEThr = 0.05)
+#' ssdata <- elongationAnalysis(ssdata, R2Thr = 0.95, maxiter = 1e4,
+#' maxconvergence=100, startpoints = 5, D2Thr = 0.1)
+#' ssdata <- desaturationAnalysis(ssdata, SEThr = 0.05)
+#' }
+#' 
+#' \dontrun{
+#' fadata <- dataCorrection(examplefadata, blankgroup = "Blank")
+#' fadata <- synthesisAnalysis(fadata, R2Thr = 0.95, maxiter = 1e3,
+#' maxconvergence = 100, startpoints = 5)
+#' fadata <- elongationAnalysis(fadata, R2Thr = 0.95, maxiter = 1e4,
+#' maxconvergence=100, startpoints = 5, D2Thr = 0.1)
+#' fadata <- desaturationAnalysis(fadata, SEThr = 0.05)
 #' }
 #'
 #' @author M Isabel Alcoriza-Balaguer <maribel_alcoriza@iislafe.es>
@@ -520,14 +549,24 @@ desaturationAnalysis <- function(fadata,
 #' E3, E4 and E5).
 #'
 #' @examples
-#' \dontrun{
-#' examplefadata <- dataCorrection(examplefadata, blankgroup = "Blank")
-#' examplefadata <- synthesisAnalysis(examplefadata, R2Thr = 0.95, maxiter = 1e3,
+#' \donttest{
+#' ssdata <- dataCorrection(ssexamplefadata, blankgroup="Blank")
+#' ssdata <- synthesisAnalysis(ssdata, R2Thr = 0.95, maxiter = 1e3,
 #' maxconvergence = 100, startpoints = 5)
-#' examplefadata <- elongationAnalysis(examplefadata, R2Thr = 0.95, maxiter = 1e4,
-#' maxconvergence = 100, startpoints = 5, D2Thr = 0.1)
-#' examplefadata <- desaturationAnalysis(examplefadata)
-#' examplefadata <- summarizeResults(examplefadata, controlgroup = "Control13Cglc")
+#' ssdata <- elongationAnalysis(ssdata, R2Thr = 0.95, maxiter = 1e4,
+#' maxconvergence=100, startpoints = 5, D2Thr = 0.1)
+#' ssdata <- desaturationAnalysis(ssdata, SEThr = 0.05)
+#' ssdata <- summarizeResults(ssdata)
+#' }
+#' 
+#' \dontrun{
+#' fadata <- dataCorrection(examplefadata, blankgroup = "Blank")
+#' fadata <- synthesisAnalysis(fadata, R2Thr = 0.95, maxiter = 1e3,
+#' maxconvergence = 100, startpoints = 5)
+#' fadata <- elongationAnalysis(fadata, R2Thr = 0.95, maxiter = 1e4,
+#' maxconvergence=100, startpoints = 5, D2Thr = 0.1)
+#' fadata <- desaturationAnalysis(fadata, SEThr = 0.05)
+#' fadata <- summarizeResults(fadata, controlgroup = "Control13Cglc")
 #' }
 #'
 #' @author M Isabel Alcoriza-Balaguer <maribel_alcoriza@iislafe.es>

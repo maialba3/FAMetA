@@ -4,13 +4,15 @@
 \alias{externalNormalization}
 \title{External normalization using additional measures (i.e. protein levels).}
 \usage{
-externalNormalization(fadata, externalnormalization)
+externalNormalization(fadata, externalnormalization, verbose = TRUE)
 }
 \arguments{
 \item{fadata}{fadata list.}
 
 \item{externalnormalization}{column names of metadata data frame used to
 define external measures.}
+
+\item{verbose}{print information messages.}
 }
 \value{
 normalised fadata by external measures.

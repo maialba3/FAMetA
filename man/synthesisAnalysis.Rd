@@ -14,7 +14,8 @@ synthesisAnalysis(
   P = NA,
   startpoints = 5,
   parameters = FAMetA::parameters,
-  propagateD = TRUE
+  propagateD = TRUE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -49,6 +50,8 @@ modified to change them or to add new fatty acids.}
 \item{propagateD}{logical. If TRUE, unsaturated fatty acids use estimated D0,
 D1,D2 and P values for saturated fatty acids (14:0 for FA shorter than 16C
 and 16:0 for FA with 16C.).}
+
+\item{verbose}{print information messages.}
 }
 \value{
 fadata list. Synthesis analysis results will be saved at the 
@@ -68,22 +71,28 @@ in case inhibitors have been used as they could reduce S below the confidence
 interval and thus, S and D parameters could be misestimated.
 }
 \examples{
+\donttest{
+ssdata <- dataCorrection(ssexamplefadata, blankgroup="Blank")
+ssdata <- synthesisAnalysis(ssdata, R2Thr = 0.95, maxiter = 1e3,
+maxconvergence = 100, startpoints = 5)
+}
+
 \dontrun{
-examplefadata <- dataCorrection(examplefadata, blankgroup = "Blank")
-examplefadata <- synthesisAnalysis(examplefadata, R2Thr = 0.95, maxiter = 1e3,
+fadata <- dataCorrection(examplefadata, blankgroup = "Blank")
+fadata <- synthesisAnalysis(fadata, R2Thr = 0.95, maxiter = 1e3,
 maxconvergence = 100, startpoints = 5)
 
 # If inhibitors have been used, make sure D2 has not been underestimated. If so,
 # D2 could be set as the one calculated for 13-Glc Control samples to improve
 # the results:
 
-# D2 <- examplefadata$synthesis$results$D2[examplefadata$synthesis$results$FA == "FA(16:0)"]
-# examplefadata$synthesis$results$Group[examplefadata$synthesis$results$FA == "FA(16:0)"]
+# D2 <- fadata$synthesis$results$D2[fadata$synthesis$results$FA == "FA(16:0)"]
+# fadata$synthesis$results$Group[fadata$synthesis$results$FA == "FA(16:0)"]
 
 # D2[4:12] <- rep(mean(D2[1:3]))
 
 # relaunch synthesis analysis fixing D2
-# examplefadata <- synthesisAnalysis(examplefadata, R2Thr = 0.95, maxiter = 1e3,
+# fadata <- synthesisAnalysis(fadata, R2Thr = 0.95, maxiter = 1e3,
 #                             maxconvergence = 100, startpoints = 5, D2 = D2)
 }
 

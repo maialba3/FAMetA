@@ -4,10 +4,12 @@
 \alias{normalizeIS}
 \title{Data normalization using internal stardards.}
 \usage{
-normalizeIS(fadata)
+normalizeIS(fadata, verbose = TRUE)
 }
 \arguments{
 \item{fadata}{fadata list.}
+
+\item{verbose}{print information messages.}
 }
 \value{
 normalised fadata by IS.

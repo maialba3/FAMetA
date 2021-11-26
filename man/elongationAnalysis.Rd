@@ -11,7 +11,8 @@ elongationAnalysis(
   maxconvergence = 100,
   startpoints = 5,
   D2Thr = 0.1,
-  parameters = FAMetA::parameters
+  parameters = FAMetA::parameters,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -33,6 +34,8 @@ for each parameter to be estimated.}
 
 \item{parameters}{parameters to be estimated for each fatty acid. It can be
 modified to change them or to add new fatty acids (adding new rows).}
+
+\item{verbose}{print information messages.}
 }
 \value{
 fadata list. Elongation analysis results will be saved at the 
@@ -53,11 +56,19 @@ FA(18:2)n6 and FA(18:3)n3 so that synthesis (S16:0) and first elongation step
 (E1) are set to 0.
 }
 \examples{
-\dontrun{
-examplefadata <- dataCorrection(examplefadata, blankgroup = "Blank")
-examplefadata <- synthesisAnalysis(examplefadata, R2Thr = 0.95, maxiter = 1e3,
+\donttest{
+ssdata <- dataCorrection(ssexamplefadata, blankgroup="Blank")
+ssdata <- synthesisAnalysis(ssdata, R2Thr = 0.95, maxiter = 1e3,
 maxconvergence = 100, startpoints = 5)
-examplefadata <- elongationAnalysis(examplefadata, R2Thr = 0.95, maxiter = 1e4,
+ssdata <- elongationAnalysis(ssdata, R2Thr = 0.95, maxiter = 1e4,
+maxconvergence=100, startpoints = 5, D2Thr = 0.1)
+}
+
+\dontrun{
+fadata <- dataCorrection(examplefadata, blankgroup = "Blank")
+fadata <- synthesisAnalysis(fadata, R2Thr = 0.95, maxiter = 1e3,
+maxconvergence = 100, startpoints = 5)
+fadata <- elongationAnalysis(fadata, R2Thr = 0.95, maxiter = 1e4,
 maxconvergence=100, startpoints = 5, D2Thr = 0.1)
 }
 

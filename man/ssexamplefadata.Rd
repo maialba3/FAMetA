@@ -1,13 +1,13 @@
-\name{examplefadata}
-\alias{examplefadata}
+\name{ssexamplefadata}
+\alias{ssexamplefadata}
 \docType{data}
 \title{
-Example fadata list.
+Toy example fadata list.
 }
 \description{
-Example fadata list.
+Toy example fadata list.
 }
-\usage{data("examplefadata")}
+\usage{data("ssexamplefadata")}
 \format{
   A list with 4 elements.
   \describe{
@@ -18,6 +18,6 @@ Example fadata list.
   }
 }
 \examples{
-data(examplefadata)
+data(ssexamplefadata)
 }
 \keyword{datasets}
