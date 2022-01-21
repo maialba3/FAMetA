@@ -1066,12 +1066,8 @@ blankSubstraction <- function(fadata, blankgroup = "blank", verbose = TRUE){
   # Substract mean of blank samples intensities and remove them
   #============================================================================#
   if (any(toupper(fadata$metadata$sampletype) == toupper(blankgroup))){
-    if (sum(toupper(fadata$metadata$sampletype) == toupper(blankgroup)) == 1){
-      blank <- fadata$intensities[,fadata$metadata$sampletype == blankgroup, drop = FALSE]
-    } else {
-      blank <- apply(fadata$intensities[,toupper(fadata$metadata$sampletype) == toupper(blankgroup)],
-                     1, mean, na.rm = T)
-    }
+    blank <- apply(fadata$intensities[,toupper(fadata$metadata$sampletype) == toupper(blankgroup), drop=FALSE],
+                   1, mean, na.rm = T)
     fadata$intensities <- fadata$intensities - blank
     fadata$intensities[fadata$intensities < 0] <- 0
     fadata$intensities <- fadata$intensities[,toupper(fadata$metadata$sampletype) != toupper(blankgroup),
