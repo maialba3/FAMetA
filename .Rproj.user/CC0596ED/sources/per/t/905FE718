@@ -3,7 +3,7 @@
     "path": "H:/Maribel/Paquetes/Github/FAMetA/DESCRIPTION",
     "project_path": "DESCRIPTION",
     "type": "dcf",
-    "hash": "1065762102",
+    "hash": "354125927",
     "contents": "",
     "dirty": false,
     "created": 1637850455334.0,
@@ -12,15 +12,15 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "5,14",
+        "cursorPosition": "3,14",
         "scrollLine": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1637850460,
+    "lastKnownWriteTime": 1642771334,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1637850460789,
+    "last_content_update": 1642771334910,
     "read_only": false,
     "read_only_alternatives": []
 }

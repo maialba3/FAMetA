@@ -167,11 +167,11 @@ plotFA <- function(msbatch, dmz, verbose = TRUE){
       peaks[[p]] <- list()
     }
     for (p in 1:nrow(isomers)){
-      iniRT2 <- isomers$iniRT[p]
-      endRT2 <- isomers$endRT[p]
+      iniRT <- isomers$iniRT[p]
+      endRT <- isomers$endRT[p]
       for (s in 1:length(msbatch$msobjects)){
         e <- eics[[s]]
-        e <- e[e$RT >= iniRT2 & e$RT <= endRT2,]
+        e <- e[e$RT >= iniRT & e$RT <= endRT,]
         if (nrow(e) > 0){
           peaks[[p]][[s]] <- e[order(e$RT), c("RT", "int")]
         } else {
@@ -217,7 +217,6 @@ plotFA <- function(msbatch, dmz, verbose = TRUE){
           smt$y[smt$y < 0] <- 0
 
           plot(smt$x, smt$y, type = "l", lwd = 2, ylim = c(0, maxint),
-               xlim = c(iniRT, endRT),
                col = scales::alpha("grey", 0.7),
                main = paste("ID: ", isomers$ID[p], "; ", fa, "; EIC: ",
                             round(isomers$mz[p],3), "; RT: ",
@@ -846,8 +845,8 @@ readfadatafile <- function(file, sep = ",", dec = "."){
 #'
 #' @return corrected fadata.
 #' 
-#' @references Su X, Lu W, Rabinowitz J (2017). Metabolite Spectral Accuracy on 
-#' Orbitraps. Analytical Chemistry, 89(11), 5940-5948, PMID: 28471646, R package 
+#' @references Su X, Lu W, Rabinowitz J (2017). “Metabolite Spectral Accuracy on 
+#' Orbitraps.” Analytical Chemistry, 89(11), 5940-5948, PMID: 28471646, R package 
 #' version 0.2.4 (2021), <https://doi.org/10.1021/acs.analchem.7b00396>. 
 #'
 #' @examples

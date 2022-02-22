@@ -337,7 +337,7 @@ elongationAnalysis <- function(fadata, R2Thr = 0.98, maxiter = 1e4,
     D2[is.na(D2)] <- means16[is.na(D2),"D2"]
     P[is.na(P)] <- means16[is.na(P),"P"]*7/8
   }
-  
+
   if (length(toDo) > 0){
     resultsElong <- list()
     for (c in toDo){

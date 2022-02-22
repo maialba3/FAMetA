@@ -46,8 +46,8 @@ ssdata <- dataCorrection(ssexamplefadata, blankgroup="Blank")
 
 }
 \references{
-Su X, Lu W, Rabinowitz J (2017). “Metabolite Spectral Accuracy on 
-Orbitraps.” Analytical Chemistry, 89(11), 5940-5948, PMID: 28471646, R package 
+Su X, Lu W, Rabinowitz J (2017). Metabolite Spectral Accuracy on 
+Orbitraps. Analytical Chemistry, 89(11), 5940-5948, PMID: 28471646, R package 
 version 0.2.4 (2021), <https://doi.org/10.1021/acs.analchem.7b00396>.
 }
 \author{
