@@ -1205,34 +1205,38 @@ heatmapResults <- function(toPlot, cols, scale = "none", breaks,
   grDevices::dev.control(displaylist = "enable")
   graphics::par(mar = c(3,4,4,1), mgp=c(2,1,0), bg = "white")
   cexRow <- 1 - nrow(toPlot)*0.005
-  if (missing(breaks)){
-    gplots::heatmap.2(as.matrix(toPlot),
-                      col=colorRampPalette(c("blue1", "white", "red"))(19),
-                      ColSideColors = cols,
-                      na.color = nacolor,
-                      density.info = "none",
-                      Rowv=F, Colv = F, trace = "none", cexCol = 0.6, cexRow = cexRow,
-                      scale = scale,
-                      dendrogram = "none", key=T, lhei=c(1, 4, 25), sepcolor="black",
-                      margins = c(15,10),
-                      colsep=0:ncol(toPlot),
-                      rowsep=0:nrow(toPlot),
-                      sepwidth=c(0.01,0.01))
+  if (nrow(toPlot) > 1 & ncol(toPlot) > 1){
+    if (missing(breaks)){
+      gplots::heatmap.2(as.matrix(toPlot),
+                        col=colorRampPalette(c("blue1", "white", "red"))(19),
+                        ColSideColors = cols,
+                        na.color = nacolor,
+                        density.info = "none",
+                        Rowv=F, Colv = F, trace = "none", cexCol = 0.6, cexRow = cexRow,
+                        scale = scale,
+                        dendrogram = "none", key=T, lhei=c(1, 4, 25), sepcolor="black",
+                        margins = c(15,10),
+                        colsep=0:ncol(toPlot),
+                        rowsep=0:nrow(toPlot),
+                        sepwidth=c(0.01,0.01))
+    } else {
+      gplots::heatmap.2(as.matrix(toPlot),
+                        col=colorRampPalette(c("blue1", "white", "red"))(19),
+                        ColSideColors = cols,
+                        na.color = nacolor,
+                        breaks = breaks,
+                        symkey = F,
+                        density.info = "none",
+                        Rowv=F, Colv = F, trace = "none", cexCol = 0.6, cexRow = cexRow,
+                        scale = scale,
+                        dendrogram = "none", key=T, lhei=c(1, 4, 25), sepcolor="black",
+                        margins = c(15,10),
+                        colsep=0:ncol(toPlot),
+                        rowsep=0:nrow(toPlot),
+                        sepwidth=c(0.01,0.01))
+    }
   } else {
-    gplots::heatmap.2(as.matrix(toPlot),
-                    col=colorRampPalette(c("blue1", "white", "red"))(19),
-                    ColSideColors = cols,
-                    na.color = nacolor,
-                    breaks = breaks,
-                    symkey = F,
-                    density.info = "none",
-                    Rowv=F, Colv = F, trace = "none", cexCol = 0.6, cexRow = cexRow,
-                    scale = scale,
-                    dendrogram = "none", key=T, lhei=c(1, 4, 25), sepcolor="black",
-                    margins = c(15,10),
-                    colsep=0:ncol(toPlot),
-                    rowsep=0:nrow(toPlot),
-                    sepwidth=c(0.01,0.01))
+    plot(0,type='n',axes=FALSE,ann=FALSE)
   }
   hm <- grDevices::recordPlot() # save plot
   invisible(grDevices::dev.off()) # close pdf NULL device

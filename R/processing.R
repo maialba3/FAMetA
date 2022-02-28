@@ -762,17 +762,16 @@ readfadatafile <- function(file, sep = ",", dec = "."){
   if (nrow(metadata) != ncol(data) - 2){
     stop("Check groups")
   }
-  colnames(data) <- as.character(cnames)
 
   # read data
   data <- data[(which(data[,2] == "Label")+1):nrow(data), , drop = FALSE]
-  colnames(data) <- cnames
+  colnames(data) <- as.character(cnames)
 
   fattyacids <- data[,c("Compound", "Label")]
   fattyacids <- fattyacids[!apply(fattyacids, 1, function(x) all(x == "")),]
   fattyacids$Label <- as.numeric(fattyacids$Label)
   data <- data[,3:ncol(data) , drop = FALSE]
-  data <- data[!apply(data, 1, function(x) all(x == "")),]
+  data <- data[!apply(data, 1, function(x) all(x == "")),, drop=FALSE]
   data <- data.frame(apply(data, 2, as.numeric))
 
   data <- data[order(fattyacids$Compound, fattyacids$Label),, drop = FALSE]
@@ -820,9 +819,9 @@ readfadatafile <- function(file, sep = ",", dec = "."){
   }
   fadata$intensities <- fadata$intensities[order(fadata$fattyacids$Compound,
                                                  fadata$fattyacids$Label),
-                             order(colnames(fadata$intensities))]
+                             order(colnames(fadata$intensities)), drop = FALSE]
   fadata$fattyacids <- fadata$fattyacids[order(fadata$fattyacids$Compound,
-                                               fadata$fattyacids$Label),]
+                                               fadata$fattyacids$Label),, drop = FALSE]
 
   return(fadata)
 }
@@ -908,7 +907,11 @@ dataCorrection <-function(fadata,
   poolsize <- do.call(rbind, lapply(falist, function(x) apply(x, 2, sum)))
   rownames(poolsize) <- unique(fadata$fattyacids$Compound)
   relativepoolsize <- apply(poolsize, 2, function(x) x/sum(x))
-
+  if (nrow(poolsize) == 1){
+    relativepoolsize <- t(as.data.frame(relativepoolsize))
+  }
+  rownames(relativepoolsize) <- rownames(poolsize)
+  
   fadata$mid <- mid
   fadata$poolsize <- poolsize
   fadata$relativepoolsize <- relativepoolsize

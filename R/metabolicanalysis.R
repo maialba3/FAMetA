@@ -634,7 +634,11 @@ summarizeResults <- function(fadata, controlgroup = NA,
 
   results$heatmaps$poolsize$zscore <- list()
   results$heatmaps$poolsize$zscore$plot <- heatmapResults(toPlot, cols, scale = "row")
-  results$heatmaps$poolsize$zscore$values <- t(apply(toPlot, 1, scale, center=TRUE))
+  if (ncol(toPlot) > 1){
+    results$heatmaps$poolsize$zscore$values <- t(apply(toPlot, 1, scale, center=TRUE))
+  } else {
+    results$heatmaps$poolsize$zscore$values <- data.frame()
+  }
 
   if (controlgroup %in% fadata$metadata$sampletype){
     toPlot <- log2(t(apply(fadata$poolsize, 1, function(x){
@@ -661,7 +665,12 @@ summarizeResults <- function(fadata, controlgroup = NA,
 
   results$heatmaps$relativepoolsize$zscore <- list()
   results$heatmaps$relativepoolsize$zscore$plot <- heatmapResults(toPlot, cols, scale = "row")
-  results$heatmaps$relativepoolsize$zscore$values <- t(apply(toPlot, 1, scale, center=TRUE))
+  if (ncol(toPlot) > 1){
+    results$heatmaps$relativepoolsize$zscore$values <- t(apply(toPlot, 1, scale, center=TRUE))
+  } else {
+    results$heatmaps$relativepoolsize$zscore$values <- data.frame()
+  }
+  
 
   if (controlgroup %in% fadata$metadata$sampletype){
     toPlot <- log2(t(apply(fadata$relativepoolsize, 1, function(x){
@@ -685,7 +694,7 @@ summarizeResults <- function(fadata, controlgroup = NA,
   toPlot <- as.data.frame(pivot_wider(toPlot, names_from = "Sample",
                                       values_from = "S"))
   rownames(toPlot) <- toPlot$FA
-  toPlot <- toPlot[,colnames(toPlot) != "FA"]
+  toPlot <- toPlot[,colnames(toPlot) != "FA", drop = FALSE]
 
   results$heatmaps$synthesized$raw <- list()
   results$heatmaps$synthesized$raw$plot <- heatmapResults(toPlot, cols, scale = "none",
@@ -728,7 +737,7 @@ summarizeResults <- function(fadata, controlgroup = NA,
   
   S16 <- df
   rownames(S16) <- df$FA
-  S16 <- S16[,colnames(S16) != "FA"]
+  S16 <- S16[,colnames(S16) != "FA", drop=FALSE]
   results$allparameters$S16 <- S16
   
   
@@ -741,7 +750,7 @@ summarizeResults <- function(fadata, controlgroup = NA,
                                          values_from = "E1"))
     E1 <- df
     rownames(E1) <- df$FA
-    E1 <- E1[,colnames(E1) != "FA"]
+    E1 <- E1[,colnames(E1) != "FA", drop=FALSE]
     results$allparameters$E1 <- E1
     
     
@@ -752,7 +761,7 @@ summarizeResults <- function(fadata, controlgroup = NA,
                                     values_from = "E2"))
     E2 <- df
     rownames(E2) <- df$FA
-    E2 <- E2[,colnames(E2) != "FA"]
+    E2 <- E2[,colnames(E2) != "FA", drop=FALSE]
     results$allparameters$E2 <- E2
     
     
@@ -763,7 +772,7 @@ summarizeResults <- function(fadata, controlgroup = NA,
                                     values_from = "E3"))
     E3 <- df
     rownames(E3) <- df$FA
-    E3 <- E3[,colnames(E3) != "FA"]
+    E3 <- E3[,colnames(E3) != "FA", drop=FALSE]
     results$allparameters$E3 <- E3
     
     
@@ -774,7 +783,7 @@ summarizeResults <- function(fadata, controlgroup = NA,
                                     values_from = "E4"))
     E4 <- df
     rownames(E4) <- df$FA
-    E4 <- E4[,colnames(E4) != "FA"]
+    E4 <- E4[,colnames(E4) != "FA", drop=FALSE]
     results$allparameters$E4 <- E4
     
     
@@ -785,7 +794,7 @@ summarizeResults <- function(fadata, controlgroup = NA,
                                     values_from = "E5"))
     E5 <- df
     rownames(E5) <- df$FA
-    E5 <- E5[,colnames(E5) != "FA"]
+    E5 <- E5[,colnames(E5) != "FA", drop=FALSE]
     results$allparameters$E5 <- E5
     
   }
