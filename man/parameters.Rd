@@ -7,7 +7,7 @@ Parameters for FA metabolic analysis.
 \usage{data("parameters")}
 \description{Parameters for FA metabolic analysis.}
 \format{
-  A data frame with 167 observations on the following 8 variables.
+  A data frame with 304 observations on the following 8 variables.
   \describe{
     \item{\code{FattyAcid}}{a character vector.}
     \item{\code{M}}{integer vector. Number of carbons.}

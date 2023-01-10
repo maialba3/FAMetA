@@ -1,7 +1,7 @@
 Package: FAMetA
 Type: Package
 Title: Fatty Acid Metabolic Analysis
-Version: 0.1.4
+Version: 0.1.5
 Authors@R: c(person("Maribel", "Alcoriza-Balaguer",
                     email = "maribel_alcoriza@iislafe.es",
                     role = c("aut", "cre")),
@@ -15,7 +15,7 @@ Description: Fatty acid metabolic analysis aimed to the estimation of FA import 
 Encoding: UTF-8
 Depends: R (>= 4.0), LipidMS, rmarkdown, knitr
 Imports: accucor, scales, gtools, minpack.lm, tidyr, plyr, gplots, grDevices
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 License: GPL (>= 2)
 LazyData: TRUE
 VignetteBuilder: knitr
