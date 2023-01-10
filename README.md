@@ -1,6 +1,6 @@
 # FAMetA
 
-FAMetA version 0.1.3:
+FAMetA version 0.1.4:
 
 FAMetA (Fatty Acid Metabolic Analysis) is an R-package aimed to the estimation of FA import (I), de novo synthesis (S), fractional contribution of the 13C-tracers (D0, D1, D2), elongation (E) and desaturation (Des) based on mass isotopologue data.
 
@@ -12,4 +12,5 @@ FAMetA (Fatty Acid Metabolic Analysis) is an R-package aimed to the estimation o
 
 References:
   - LipidMS: An R Package for Lipid Annotation in Untargeted Liquid Chromatography-Data Independent Acquisition-Mass Spectrometry Lipidomics. Anal Chem, 2019. doi:10.1021/acs.analchem.8b03409.
+  - LipidMS 3.0: an R-package and a web-based tool for LC-MS/MS data processing and lipid annotation. bioRxiv, 2022. doi.org/10.1101/2022.02.25.476005
   - Su X, Lu W and Rabinowitz J (2017). Metabolite Spectral Accuracy on Orbitraps. Anal Chem, 2017. doi.org/10.1021/acs.analchem.7b00396.
