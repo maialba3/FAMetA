@@ -9,7 +9,7 @@ Desaturation reactions database.
 }
 \usage{data("desaturationsdb")}
 \format{
-  A data frame with 31 observations on the following 3 variables.
+  A data frame with 13 observations on the following 3 variables.
   \describe{
     \item{\code{precursor}}{character vector.}
     \item{\code{product}}{character vector.}

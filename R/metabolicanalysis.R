@@ -97,10 +97,10 @@ synthesisAnalysis <- function(fadata,
   if (!length(P) %in% c(1, length(fadata$metadata$sample))){
     stop("P must have a length of 1 or equal to the number of samples")
   }
-
-  inputD1 <- D1
-  inputD2 <- D2
-  inputP <- P
+  
+  if (length(D1) == 1){inputD1 <- rep(D1, nrow(fadata$metadata))} else {inputD1 <- D1}
+  if (length(D2) == 1){inputD2 <- rep(D2, nrow(fadata$metadata))} else {inputD2 <- D2}
+  if (length(P) == 1){inputP <- rep(P, nrow(fadata$metadata))} else {inputP <- P}
   #============================================================================#
   # Run DNSIA algorithm for each compound and sample
   #============================================================================#
@@ -117,7 +117,7 @@ synthesisAnalysis <- function(fadata,
       results1 <- runSynthesisAnalysis(fadata = fadata, toDo = toDo1,
                                        R2Thr = R2Thr, maxiter = maxiter,
                                        maxconvergence = maxconvergence,
-                                       D1 = D1, D2 = D2, P = P,
+                                       D1 = inputD1, D2 = inputD2, P = inputP,
                                        startpoints = startpoints,
                                        verbose = verbose)
       if (length(toDo2) > 0){
@@ -217,7 +217,8 @@ synthesisAnalysis <- function(fadata,
       results <- runSynthesisAnalysis(fadata = fadata, toDo = toDo2,
                                       R2Thr = R2Thr, maxiter = maxiter,
                                       maxconvergence = maxconvergence,
-                                      D1 = D1, D2 = D2, P = P, startpoints = startpoints)
+                                      D1 = inputD1, D2 = inputD2, P = inputP, 
+                                      startpoints = startpoints)
     }
     fadata$synthesis <- results
   } else {

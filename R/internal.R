@@ -319,7 +319,7 @@ runSynthesisAnalysis <- function(fadata, toDo, R2Thr = R2Thr,
     compounds <- do.call(rbind, lapply(resultsSynth, function(x) x[[2]][,c("Compound", "Label")]))
     predictedValues <- cbind(compounds, predictedValues)
     rownames(predictedValues) <- paste(predictedValues$Compound, "_M+", 
-                                       predictedValues$Label, sep="")
+                                       predictedValues$Label, sep = "")
 
     plots <- plotResults(resultsSynth, fadata$metadata$sampletype, toDo)
 
@@ -402,12 +402,11 @@ estimateSynthesis <- function(fa, M, R2Thr = 0.9, maxiter = 1e3,
 
       if (!is.null(model)){
         if (is.na(P[s]) & is.na(D2[s])){
-          if (coef(model)["D2"] >= 0.75 &
-              coef(model)["P"] >= 0.5*(1-coef(model)["D2"])/(M/2)){
+          if (coef(model)["D2"] >= 0.75 & coef(model)["P"] >= 0.5*(1-coef(model)["D2"])/(M/2)){
             model <- tryCatch({estimatePars(formula, gridStart, datanls,
                                             maxiter = maxiter,
                                             maxconvergence=maxconvergence,
-                                            limitPhi = 0.25*(1-coef(model)["D2"])/(M/2))},
+                                            limitPhi = 0.25*(1-coef(model)["D2"])/(M/2))}, 
                               error = function(e){NULL})
           }
         }

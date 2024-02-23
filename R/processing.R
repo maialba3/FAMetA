@@ -65,7 +65,9 @@ annotateFA <- function(msbatch,
   fas <- LipidMS::findCandidates(msbatch$features[msbatch$features$isotope == "[M+0]",],
                                  db = dbs$fadb,
                                  ppm = dmz,
-                                 rt = rt, adducts = adducts, rttol = 5,
+                                 rt = rt, 
+                                 adducts = adducts, 
+                                 rttol = 5,
                                  dbs = dbs)
   fas <- fas[order(fas$cb, fas$RT),]
 
@@ -338,7 +340,7 @@ curateFAannotations <- function(msbatch, faid, dmz = 10){
   rownames(msbatch$fas) <- msbatch$fas$ID
 
 
-  if (any(duplicated(faid$FAid))){
+  if (any(duplicated(faid$FAid[faid$FAid != "IS"]))){
     message(paste(unique(faid$FAid[duplicated(faid$FAid)]), collapse=", "), "duplicated.")
     stop("Compound names (FAid column) must be unique.")
   }
@@ -656,6 +658,17 @@ searchFAisotopes <- function(msbatch,
   #============================================================================#
   # Change msbatch structure to make it compatible with LipidMS::searchIsotopes
   #============================================================================#
+  
+  msbatch$fas$RTminutes <- round(msbatch$fas$RT/60, 2)
+  if (!"RTminutes" %in% colnames(msbatch$features)){
+    msbatch$features$RTminutes <- round(msbatch$features$RT/60, 2)
+    msbatch$features <- msbatch$features[,c("mz", "minmz", "maxmz", "RT", "RTminutes", 
+                                            "minRT", "maxRT", "iniRT", "endRT", 
+                                            "npeaks", "group", "isotope", "isoGroup",
+                                            make.names(msbatch$metaData$sample))]
+  }
+  
+  
   features <- msbatch$features
   msbatch$features <- msbatch$fas
   msbatch$features$LipidMSid <- gsub("n[a-z]|n[0-9]*", "", msbatch$features$FAid)
